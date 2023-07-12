@@ -1,35 +1,39 @@
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
-
+import {DateRangePicker } from 'react-date-range';
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import 'react-date-range/dist/styles.css'; // main css file
+import 'react-date-range/dist/theme/default.css'; // theme css file
 import {
     faMagnifyingGlass,
     faGlobe,
     faBars,
     faUser,
+    faUserGroup,
   } from "@fortawesome/free-solid-svg-icons";
 
-  import {useState} from 'react'
-  const [state, setState] = useState([
-      {
-        startDate: new Date(),
-        endDate: null,
-        key: 'selection'
-      }
-    ]);
-    
+
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
+      const [state, setState] = useState({
+    selection1: {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: 'selection1'
+    },
+  });
+const [clicksearchbar, setclicksearchbar] = useState("");
   return (
     <main>
     <div class="max-w-full sticky  z-100 grid grid-cols-3 bg-white p-5 drop-shadow-lg">
-        <div class="flex justify-start items-center mx-0 p-2">
-           <div className="bnbimage z-10 bg-cover h-11 w-40 rounded-lg "></div>
+        <div class="flex justify-start items-center mx-0 px-2">
+           <div className="bnbimage  bg-cover h-12 w-40 py-3 rounded-lg "></div>
             
         </div>
         <div class="flex items-center rounded-full bg-white hover:drop-shadow-lg border-2 border-gray-200 m-1 p-2">
-            <input type="text" placeholder="    Start your search" class="flex-grow text-gray-500 focus:outline-none">
+            <input type="text" placeholder="    Start your search" onChange={(e)=>{setclicksearchbar(e.target.value)}} class="flex-grow text-gray-500 focus:outline-none">
                 
             </input>
             <FontAwesomeIcon className="text-lg px-2.5 py-2 h-8 text-white" icon={faMagnifyingGlass} />
@@ -52,48 +56,32 @@ export default function Home() {
         </div>
         <div className="mx-auto col-span-3">
         <div className="flex flex-row mx-auto  col-span-3 items-center justify-center">
-        <div class="flex felx-col col-span-3"></div>
-          <div className=" w-40 border-gray-400">
-            <div className="text-red-500 border-b-2 bg-white"><button>today</button></div> 
-            <div className="hover:bg-gray-400 border-b-2 border-gray-300 bg-white"><button>yesterday</button></div>
-            <div className="hover:bg-gray-400 border-b-2 border-gray-300 bg-white"><button>this week</button></div>
-            <div className="hover:bg-gray-400 border-b-2 border-gray-300 bg-white"><button>last week</button></div>
-            <div className="hover:bg-gray-400 border-b-2 border-gray-300 bg-white"><button>this month</button></div>
-            <div className="hover:bg-gray-400 border-b-2 border-gray-300 bg-white"><button>last month</button></div>
-            <div className=""><input type="number" className="w-8  border-b-2 border-gray-400 bg-gray-300 rounded-lg" /> days to go</div>
-            <div className="w-80"><input type="number" className=" w-8  border-b-2 border-gray-400 bg-gray-300 rounded-lg" /> days starting today</div>
-          </div>
+            
+</div>
 
-            <div class="flex flex-col">
-            <div class="flex mb-40 bg-gray-200 p-1 ">
-            <button readOnly class="m-1 p-2 text-center   hover:cursor-pointer w-40 border-b-2 border-gray-400 bg-white rounded-sm text-gray-500">july 11,2023</button>
-            <button readOnly class="m-1 p-2 text-center   hover:cursor-pointer w-40 border-b-2 border-gray-400 bg-white rounded-sm text-gray-500">july 11,2023</button>
-            </div>
-            </div>
-
-            <div>
-            <DateRange
-            editableDateInputs={true}
-             onChange={item => setState([item.selection])}
-             moveRangeOnFirstSelection={false}
-            ranges={state}
-/>
-            </div>
-</div>div
+     {clicksearchbar!=""?
       <div>
+      <div className="flex">
+                <div className='flex flex-col'>
+                  <div> <DateRangePicker className = "sm:w-full  w-28" color="red"  onChange={item => setState({ ...state, ...item })} moveRangeOnFirstSelection={true}  ranges={[state.selection1]} value = {state} rangeColors={['#f33e5b', '#3ecf8e', '#fed14c']} minDate={new Date()}/></div>
+                </div>
+             </div>
+
         <div className=" grid grid-cols-2 mt-4 mmx-2 border-b-2 ">
           <div class="text-2xl font-normal justify-items-start">Number of Guests</div>
-          <div class="flex items items-center ">
-          <input type="number" class="w-12 h-8 border-none right-40 text-red-500 value=1"></input>
+          <div class="flex items items-center justify-end">
+          <FontAwesomeIcon className="text-lg px-2.5 py-2 h-8 text-black" icon={faUserGroup} />
+          <input type="number" class="w-12 h-8 border-none outline-none right-40  text-red-500 value=1"></input>
         </div>
   </div>
-        
-      </div>
-
-      <div class="grid grid-cols-2 mt-4 sborder-b-2 mx-2   ">
-        <button class="text-gray-400">cancel</button>
+  <div class="grid grid-cols-2 mt-4 border-b-2 mx-2   ">
+        <button onClick={()=>{setclicksearchbar("")}}
+        class="text-gray-400">cancel</button>
         <button class="text-red-400">search</button>
       </div>
+      </div>:""}
+
+     
 
       </div>
     </div>
